@@ -1,12 +1,8 @@
 import streamlit as st
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+from google.cloud import firestore
 
-cred = credentials.Certificate("New.json")
-
-app = firebase_admin.initialize_app(cred)
-db = firestore.client()
+# Authenticate to Firestore with the JSON account key.
+db = firestore.Client.from_service_account_json("New.json")
 
 # Create a reference to the Google post.
 doc_ref = db.collection("Cats").document("AXujBsnBQI4GPjpD9A4y")
