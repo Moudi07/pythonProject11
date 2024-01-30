@@ -8,7 +8,7 @@ from skimage.metrics import structural_similarity
 from skimage import measure
 from sklearn.decomposition import PCA
 from sklearn.neighbors import KNeighborsClassifier
-import joblib
+import pickle
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 import numpy as np
@@ -224,7 +224,7 @@ class ECG:
 		"""
 		#first load the trained pca
 		pca_model_path = '/path/to/your/file/PCA_ECG (1).pkl'
-		pca_loaded_model = joblib.load(pca_model_path)
+		pca_loaded_model = pickle.load(pca_model_path)
 		result = pca_loaded_model.transform(test_final)
 		final_df = pd.DataFrame(result)
 		return final_df
