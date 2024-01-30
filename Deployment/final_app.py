@@ -1,70 +1,56 @@
 import streamlit as st
-from Ecg import  ECG
-#intialize ecg object
+from Ecg import ECG
+
+# Initialize ECG object
 ecg = ECG()
-#get the uploaded image
+
+# Get the uploaded image
 uploaded_file = st.file_uploader("Choose a file")
 
 if uploaded_file is not None:
-  """#### **UPLOADED IMAGE**"""
-  # call the getimage method
-  ecg_user_image_read = ecg.getImage(uploaded_file)
-  #show the image
-  st.image(ecg_user_image_read)
+    # UPLOADED IMAGE
+    ecg_user_image_read = ecg.getImage(uploaded_file)
+    st.image(ecg_user_image_read)
 
-  """#### **GRAY SCALE IMAGE**"""
-  #call the convert Grayscale image method
-  ecg_user_gray_image_read = ecg.GrayImgae(ecg_user_image_read)
-  
-  #create Streamlit Expander for Gray Scale
-  my_expander = st.expander(label='Gray SCALE IMAGE')
-  with my_expander: 
-    st.image(ecg_user_gray_image_read)
-  
-  """#### **DIVIDING LEADS**"""
-   #call the Divide leads method
-  dividing_leads=ecg.DividingLeads(ecg_user_image_read)
+    # GRAY SCALE IMAGE
+    ecg_user_gray_image_read = ecg.GrayImgae(ecg_user_image_read)
+    with st.expander(label='Gray SCALE IMAGE'):
+        st.image(ecg_user_gray_image_read)
 
-  #streamlit expander for dividing leads
-  my_expander1 = st.expander(label='DIVIDING LEAD')
-  with my_expander1:
-    st.image('Leads_1-12_figure.png')
-    st.image('Long_Lead_13_figure.png')
-  
-  """#### **PREPROCESSED LEADS**"""
-  #call the preprocessed leads method
-  ecg_preprocessed_leads = ecg.PreprocessingLeads(dividing_leads)
+    # DIVIDING LEADS
+    dividing_leads = ecg.DividingLeads(ecg_user_image_read)
+    with st.expander(label='DIVIDING LEAD'):
+        st.image('Leads_1-12_figure.png')
+        st.image('Long_Lead_13_figure.png')
 
-  #streamlit expander for preprocessed leads
-  my_expander2 = st.expander(label='PREPROCESSED LEAD')
-  with my_expander2:
-    st.image('Preprossed_Leads_1-12_figure.png')
-    st.image('Preprossed_Leads_13_figure.png')
-  
-  """#### **EXTRACTING SIGNALS(1-12)**"""
-  #call the sognal extraction method
-  ec_signal_extraction = ecg.SignalExtraction_Scaling(dividing_leads)
-  my_expander3 = st.expander(label='CONOTUR LEADS')
-  with my_expander3:
-    st.image('Contour_Leads_1-12_figure.png')
-  
-  """#### **CONVERTING TO 1D SIGNAL**"""
-  #call the combine and conver to 1D signal method
-  ecg_1dsignal = ecg.CombineConvert1Dsignal()
-  my_expander4 = st.expander(label='1D Signals')
-  with my_expander4:
-    st.write(ecg_1dsignal)
-    
-  """#### **PERFORM DIMENSINALITY REDUCTION**"""
-  #call the dimensinality reduction funciton
-  ecg_final = ecg.DimensionalReduciton(ecg_1dsignal)
-  my_expander4 = st.expander(label='Dimensional Reduction')
-  with my_expander4:
-    st.write(ecg_final)
-  
-  """#### **PASS TO PRETRAINED ML MODEL FOR PREDICTION**"""
-  #call the Pretrainsed ML model for prediction
-  ecg_model=ecg.ModelLoad_predict(ecg_final)
-  my_expander5 = st.expander(label='PREDICTION')
-  with my_expander5:
-    st.write(ecg_model)
+    # PREPROCESSED LEADS
+    ecg_preprocessed_leads = ecg.PreprocessingLeads(dividing_leads)
+    with st.expander(label='PREPROCESSED LEAD'):
+        st.image('Preprossed_Leads_1-12_figure.png')
+        st.image('Preprossed_Leads_13_figure.png')
+
+    # EXTRACTING SIGNALS(1-12)
+    ec_signal_extraction = ecg.SignalExtraction_Scaling(dividing_leads)
+    with st.expander(label='CONOTUR LEADS'):
+        st.image('Contour_Leads_1-12_figure.png')
+
+    # CONVERTING TO 1D SIGNAL
+    ecg_1dsignal = ecg.CombineConvert1Dsignal()
+    with st.expander(label='1D Signals'):
+        st.write(ecg_1dsignal)
+
+    # PERFORM DIMENSIONALITY REDUCTION
+    try:
+        ecg_final = ecg.DimensionalReduciton(ecg_1dsignal)
+        with st.expander(label='Dimensional Reduction'):
+            st.write(ecg_final)
+    except Exception as e:
+        st.error(f"Error in Dimensional Reduction: {e}")
+
+    # PASS TO PRETRAINED ML MODEL FOR PREDICTION
+    try:
+        ecg_model = ecg.ModelLoad_predict(ecg_final)
+        with st.expander(label='PREDICTION'):
+            st.write(ecg_model)
+    except Exception as e:
+        st.error(f"Error in Model Prediction: {e}")
