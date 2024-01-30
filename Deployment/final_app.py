@@ -1,5 +1,6 @@
 import streamlit as st
 from Ecg import ECG
+import io
 
 # Initialize ECG object
 ecg = ECG()
@@ -8,8 +9,11 @@ ecg = ECG()
 uploaded_file = st.file_uploader("Choose a file")
 
 if uploaded_file is not None:
+    # Read the file into a buffer
+    file_buffer = io.BytesIO(uploaded_file.read())
+
     # UPLOADED IMAGE
-    ecg_user_image_read = ecg.getImage(uploaded_file)
+    ecg_user_image_read = ecg.getImage(file_buffer)
     st.image(ecg_user_image_read)
 
     # GRAY SCALE IMAGE
