@@ -1,8 +1,9 @@
-scikit-learn
-scikit-image
-unzip
-joblib
-pandas
-matplotlib
-natsort
 streamlit
+scikit-image
+matplotlib
+numpy
+pandas
+scikit-learn
+joblib
+natsort
+
