@@ -1,9 +1,0 @@
-streamlit
-scikit-image
-matplotlib
-numpy
-pandas
-scikit-learn
-joblib
-natsort
-
